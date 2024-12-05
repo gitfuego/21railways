@@ -58,6 +58,13 @@ public class ApplicationDB {
 		ApplicationDB dao = new ApplicationDB();
 		Connection connection = dao.getConnection();
 		
+		if (connection != null) {
+            System.out.println("Connection successful: " + connection);
+            dao.closeConnection(connection);
+        } else {
+            System.out.println("Connection failed");
+        }
+
 		System.out.println(connection);		
 		dao.closeConnection(connection);
 	}
