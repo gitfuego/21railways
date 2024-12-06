@@ -12,11 +12,9 @@
             padding: 0;
             text-align: center;
         }
-
         h2 {
             color: #333;
         }
-
         .login-form {
             margin: 100px auto;
             padding: 20px;
@@ -25,11 +23,9 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             width: 300px;
         }
-
         .form-group {
             margin: 15px 0;
         }
-
         input[type="text"], input[type="password"], select {
             width: 100%;
             padding: 10px;
@@ -38,7 +34,6 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
         input[type="submit"] {
             background-color: #007bff;
             color: white;
@@ -47,11 +42,9 @@
             border-radius: 4px;
             cursor: pointer;
         }
-
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
-
         .signup-btn {
             margin-top: 15px;
             display: block;
@@ -61,7 +54,6 @@
             border-radius: 4px;
             text-decoration: none;
         }
-
         .signup-btn:hover {
             background-color: #218838;
         }
@@ -83,7 +75,8 @@
                 <label for="role">Select Role</label>
                 <select name="role" required>
                     <option value="customer">Customer</option>
-                    <option value="employee">Employee</option>
+                    <option value="employee">Manager</option>
+                    <option value="employee">Customer Representative</option>
                 </select>
             </div>
             <input type="submit" value="Login" />
@@ -92,4 +85,3 @@
     </div>
 </body>
 </html>
-

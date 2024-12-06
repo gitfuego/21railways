@@ -18,7 +18,6 @@ String lastName = request.getParameter("LastName");
 String email = request.getParameter("Email");
 
 try {
-    // Initialize database connection
     ApplicationDB db = new ApplicationDB();
     Connection con = db.getConnection();
 
@@ -50,7 +49,6 @@ try {
         ps2.close();
     }
 
-    // Close the ResultSet, PreparedStatement, and Connection
     rs.close();
     ps.close();
     con.close();
