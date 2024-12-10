@@ -24,7 +24,7 @@
                 session.setAttribute("role", "customer"); 
                 response.sendRedirect("customerHome.jsp"); 
             } else {
-                out.println("Invalid customer credentials!");
+                out.println("Invalid customer credentials! <a href='login.jsp'>Try again</a>");
             }
         } else if (role.equals("employee")) {
             ps = con.prepareStatement("SELECT * FROM Employee WHERE username=? AND password=?");
@@ -45,7 +45,7 @@
                     out.println("Unknown employee role!");
                 }
             } else {
-                out.println("Invalid employee credentials!");
+                out.println("Invalid employee credentials! <a href='login.jsp'>Try again</a>");
             }
         }
     } catch (Exception e) {
