@@ -48,7 +48,9 @@
         <a href="manageCustomerRepresentatives.jsp" class="nav-link">Manage Customer Representatives</a>
         <a href="viewSalesReport.jsp" class="nav-link">View Sales Report</a>
         <a href="generateReports.jsp" class="nav-link">Generate Reports</a>
+        <a href="browseSchedules.jsp" class="nav-link">Browse Schedules</a>
         <a href="logout.jsp" class="nav-link">Log Out</a>
+
 <%
     }
 %>

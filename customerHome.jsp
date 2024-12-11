@@ -45,6 +45,7 @@
         <!-- Future links to add for other customer pages -->
         <a href="viewReservations.jsp" class="nav-link">View Reservations</a>
         <a href="bookReservation.jsp" class="nav-link">Book Reservation</a>
+        <a href="searchSchedules.jsp" class="nav-link">Browse Schedules</a>
         <a href="logout.jsp" class="nav-link">Log Out</a>
 <%
     }
