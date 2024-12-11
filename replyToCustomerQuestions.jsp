@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*, com.cs336.pkg.ApplicationDB" %>
+<%@ page import="java.sql.*, java.util.*, com.cs336.pkg.ApplicationDB" %>
 <%
-    ResultSet questions = null;
+    List<Map<String, Object>> questionsList = new ArrayList<>();
     String selectedQuestionId = request.getParameter("questionId");
     String message = "";
 
@@ -10,7 +10,17 @@
         ApplicationDB db = new ApplicationDB();
         Connection conn = db.getConnection();
         PreparedStatement pstmt = conn.prepareStatement("SELECT question_id, question_text FROM Questions WHERE answered=false");
-        questions = pstmt.executeQuery();
+        ResultSet questions = pstmt.executeQuery();
+
+        while (questions.next()) {
+            Map<String, Object> question = new HashMap<>();
+            question.put("question_id", questions.getInt("question_id"));
+            question.put("question_text", questions.getString("question_text"));
+            questionsList.add(question);
+        }
+
+        questions.close();
+        pstmt.close();
         conn.close();
     } catch (Exception e) {
         message = "Error: " + e.getMessage();
@@ -34,6 +44,7 @@
                 message = "Error updating the answer. Please try again.";
             }
 
+            pstmt.close();
             conn.close();
         } catch (Exception e) {
             message = "Error: " + e.getMessage();
@@ -56,9 +67,9 @@
         <select name="questionId" required>
             <option value="" disabled selected>Select a Question</option>
             <% 
-                while (questions != null && questions.next()) {
-                    int questionId = questions.getInt("question_id");
-                    String questionText = questions.getString("question_text");
+                for (Map<String, Object> question : questionsList) {
+                    int questionId = (int) question.get("question_id");
+                    String questionText = (String) question.get("question_text");
             %>
             <option value="<%= questionId %>"><%= questionText %></option>
             <% 

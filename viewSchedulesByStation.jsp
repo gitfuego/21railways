@@ -1,34 +1,59 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*, com.cs336.pkg.ApplicationDB" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*, java.util.*, com.cs336.pkg.ApplicationDB" %>
 <%
     String selectedStation = request.getParameter("stationName");
-    ResultSet stations = null;
-    ResultSet schedules = null;
+    List<String> stationList = new ArrayList<>();
+    List<Map<String, Object>> scheduleList = new ArrayList<>();
+    String message = "";
+
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
 
     try {
         ApplicationDB db = new ApplicationDB();
-        Connection conn = db.getConnection();
-        
- 
-        PreparedStatement stmt = conn.prepareStatement("SELECT name FROM Station");
-        stations = stmt.executeQuery();
+        conn = db.getConnection();
 
+        // Fetch all station names
+        stmt = conn.prepareStatement("SELECT name FROM Station");
+        rs = stmt.executeQuery();
+        while (rs.next()) {
+            stationList.add(rs.getString("name"));
+        }
+        rs.close();
+        stmt.close();
+
+        // Fetch schedules if a station is selected
         if (selectedStation != null && !selectedStation.trim().isEmpty()) {
             stmt = conn.prepareStatement(
                 "SELECT Tschedule.schedule_id, Tschedule.transit_line, " +
-                "Station.name AS station_name, Tschedule.origin_departure, Tschedule.origin_arrival, " +
+                "Tschedule.origin_departure, Tschedule.origin_arrival, " +
                 "Tschedule.destination_departure, Tschedule.destination_arrival " +
                 "FROM Tschedule " +
                 "JOIN Station ON (Station.sid = Tschedule.origin_id OR Station.sid = Tschedule.destination_id) " +
                 "WHERE Station.name = ?"
             );
             stmt.setString(1, selectedStation);
-            schedules = stmt.executeQuery();
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Map<String, Object> schedule = new HashMap<>();
+                schedule.put("schedule_id", rs.getInt("schedule_id"));
+                schedule.put("transit_line", rs.getString("transit_line"));
+                schedule.put("origin_departure", rs.getTimestamp("origin_departure"));
+                schedule.put("origin_arrival", rs.getTimestamp("origin_arrival"));
+                schedule.put("destination_departure", rs.getTimestamp("destination_departure"));
+                schedule.put("destination_arrival", rs.getTimestamp("destination_arrival"));
+                scheduleList.add(schedule);
+            }
         }
-        
-        conn.close();
     } catch (Exception e) {
-        e.printStackTrace();
+        message = "Error: " + e.getMessage();
+        e.printStackTrace(); // Log error for debugging
+    } finally {
+        try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+        try { if (stmt != null) stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+        try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
     }
 %>
 
@@ -41,17 +66,16 @@
 <body>
     <h1>View Schedules for a Station</h1>
 
-    <!-- Here is the dropdown  to select station name -->
+    <!-- Dropdown to select station name -->
     <form method="GET" action="viewSchedulesByStation.jsp">
         <label for="stationName">Select a Station:</label>
         <select name="stationName" required>
             <option value="" disabled selected>Select Station</option>
             <% 
-                while (stations != null && stations.next()) {
-                    String station = stations.getString("name");
-                    %>
-                    <option value="<%= station %>" <%= selectedStation != null && selectedStation.equals(station) ? "selected" : "" %>><%= station %></option>
-                    <% 
+                for (String station : stationList) {
+            %>
+            <option value="<%= station %>" <%= selectedStation != null && selectedStation.equals(station) ? "selected" : "" %>><%= station %></option>
+            <% 
                 }
             %>
         </select><br>
@@ -60,8 +84,7 @@
 
     <% 
         if (selectedStation != null && !selectedStation.trim().isEmpty()) {
-            if (schedules != null) {
-                if (schedules.next()) {
+            if (!scheduleList.isEmpty()) {
     %>
     <h3>Schedules for <%= selectedStation %></h3>
     <table border="1">
@@ -74,26 +97,31 @@
             <th>Destination Arrival</th>
         </tr>
         <% 
-            do {
+            for (Map<String, Object> schedule : scheduleList) {
         %>
         <tr>
-            <td><%= schedules.getInt("schedule_id") %></td>
-            <td><%= schedules.getString("transit_line") %></td>
-            <td><%= schedules.getTimestamp("origin_departure") %></td>
-            <td><%= schedules.getTimestamp("origin_arrival") %></td>
-            <td><%= schedules.getTimestamp("destination_departure") %></td>
-            <td><%= schedules.getTimestamp("destination_arrival") %></td>
+            <td><%= schedule.get("schedule_id") %></td>
+            <td><%= schedule.get("transit_line") %></td>
+            <td><%= schedule.get("origin_departure") %></td>
+            <td><%= schedule.get("origin_arrival") %></td>
+            <td><%= schedule.get("destination_departure") %></td>
+            <td><%= schedule.get("destination_arrival") %></td>
         </tr>
         <% 
-            } while (schedules.next());
+            }
         %>
     </table>
     <% 
             } else {
-                out.println("<p>No schedules found for this station.</p>");
+    %>
+    <p>No schedules found for this station.</p>
+    <% 
             }
         }
-    }
     %>
+
+    <% if (!message.isEmpty()) { %>
+    <p style="color: red;"><%= message %></p>
+    <% } %>
 </body>
 </html>
