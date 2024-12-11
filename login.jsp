@@ -59,6 +59,7 @@
     </style>
 </head>
 <body>
+    <h1>21Railways</h1>
     <h2>Login</h2>
     <div class="login-form">
         <form action="loginHandler.jsp" method="POST">
