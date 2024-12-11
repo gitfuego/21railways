@@ -135,7 +135,7 @@
         </form>
     </div>
 
-    <p><a href="managerHome.jsp" class="nav-link">Back to Manager Home</a></p>
+    <p><a href="customerHome.jsp" class="nav-link">Back to Manager Home</a></p>
 <%
     }
 %>
