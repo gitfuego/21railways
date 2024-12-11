@@ -129,6 +129,17 @@ create table Reservation (
     foreign key (passenger) references Customer(username)
 ) engine = InnoDB;
 
+
+CREATE TABLE Questions (
+    question_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL, 
+    question_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    answered BOOLEAN DEFAULT FALSE,
+    answer TEXT
+)engine = InnoDB ;
+
+
 -- -----------------------------------------------
 --	Data Insertion								--
 -- -----------------------------------------------

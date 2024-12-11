@@ -44,12 +44,16 @@
             <p>You are logged in as <%= role %> (Customer Representative).</p>
         </div>
 
-        <!-- Future links to add for  customer representative-related pages -->
+        <!-- Future links to  add for  customer representative-related pages -->
         <a href="editTrainSchedules.jsp" class="nav-link">Edit Train Schedules</a>
         <a href="replyToCustomerQuestions.jsp" class="nav-link">Reply to Customer Questions</a>
         <a href="viewReservationsByLine.jsp" class="nav-link">View Reservations by Transit Line</a>
         <a href="viewSchedulesByStation.jsp" class="nav-link">View Schedules by Station</a>
+
         <a href="logout.jsp" class="nav-link">Log Out</a>
+
+
+        
 <%
     }
 %>
