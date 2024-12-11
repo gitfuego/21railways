@@ -33,7 +33,7 @@
     String user = (String) session.getAttribute("user");
     String role = (String) session.getAttribute("role");
     
-    if (user == null || !"customerRep".equals(role)) {
+    if (user == null || !"customer_rep".equals(role)) {
 %>
         <h2>You are not authorized to access this page. Please <a href="login.jsp">log in</a>.</h2>
 <%

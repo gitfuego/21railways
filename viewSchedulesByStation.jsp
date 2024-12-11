@@ -93,6 +93,7 @@
                 out.println("<p>No schedules found for this station.</p>");
             }
         }
+    }
     %>
 </body>
 </html>
