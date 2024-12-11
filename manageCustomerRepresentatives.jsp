@@ -10,7 +10,6 @@
         return;
     }
 
-    // Access the shared database connection
     Connection con = null;
     PreparedStatement ps = null;
     ResultSet rs = null;

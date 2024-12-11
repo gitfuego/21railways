@@ -11,8 +11,6 @@
         response.sendRedirect("login.jsp"); // Redirect to login if not logged in
         return;
     }
-
-    ApplicationDB db = new ApplicationDB();
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -22,6 +20,7 @@
 
     try {
         // Establish connection
+        ApplicationDB db = new ApplicationDB();
         conn = db.getConnection();
 
         // Query to fetch current and past reservations for the logged-in user
