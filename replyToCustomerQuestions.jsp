@@ -6,25 +6,35 @@
     String answer = request.getParameter("answer");
 
     if (questionId != null && answer != null && !answer.trim().isEmpty()) {
-        try {
-            ApplicationDB db = new ApplicationDB();
-            Connection conn = db.getConnection();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
 
-=            PreparedStatement pstmt = conn.prepareStatement("UPDATE Questions SET answer=?, answered=true WHERE question_id=?");
+        try {
+            // Establish connection
+            ApplicationDB db = new ApplicationDB();
+            conn = db.getConnection();
+
+            // Prepare and execute the update statement
+            String query = "UPDATE Questions SET answer = ?, answered = true WHERE question_id = ?";
+            pstmt = conn.prepareStatement(query);
             pstmt.setString(1, answer);
             pstmt.setInt(2, Integer.parseInt(questionId));
-            int rows = pstmt.executeUpdate();
 
+            int rows = pstmt.executeUpdate();
             if (rows > 0) {
                 message = "Answer has been submitted successfully!";
             } else {
                 message = "Error updating the answer. Please try again.";
             }
-
-            conn.close();
         } catch (Exception e) {
             message = "Error: " + e.getMessage();
+            e.printStackTrace(); // Log the error for debugging
+        } finally {
+            try { if (pstmt != null) pstmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
+    } else if (answer != null && answer.trim().isEmpty()) {
+        message = "Answer cannot be empty.";
     }
 %>
 
