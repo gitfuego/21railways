@@ -3,7 +3,6 @@
 <%@ page import="com.cs336.pkg.ApplicationDB" %>
 <%@ page import="java.util.*" %>
 <%
-    // Check if the user is a manager
     String role = (String) session.getAttribute("role");
     if (role == null || !role.equals("manager")) {
         response.sendRedirect("login.jsp"); // Redirect to login if not authorized
@@ -25,7 +24,6 @@
             ApplicationDB db = new ApplicationDB();
             con = db.getConnection();
 
-            // Delete the customer representative
             String sql = "DELETE FROM Employee WHERE username = ? AND role = 'customer_rep'";
             ps = con.prepareStatement(sql);
             ps.setString(1, username);

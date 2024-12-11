@@ -74,10 +74,8 @@
             PreparedStatement ps = null;
             ResultSet rs = null;
 
-            // Check if form submitted
             String transitLineSubmitted = request.getParameter("transit_line");
             if (transitLineSubmitted != null) {
-                // Form submitted, process update
                 String transit_line = request.getParameter("transit_line");
                 int origin_id = Integer.parseInt(request.getParameter("origin_id"));
                 int destination_id = Integer.parseInt(request.getParameter("destination_id"));
@@ -122,7 +120,6 @@
                 <a href="editTrainSchedules.jsp" class="nav-link">Back to Edit Schedules</a>
 <%
             } else {
-                // No form submit, display the current values
                 String transitLine = null;
                 int originId = 0;
                 int destinationId = 0;

@@ -5,16 +5,13 @@
 <%@ page import="java.sql.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
-    // Retrieve the username from the session
     String username = (String) session.getAttribute("user");
 
-    // Check if the user is logged in
     if (username == null) {
         response.sendRedirect("login.jsp"); // Redirect to login if not logged in
         return;
     }
     
-    // Get the current date (java.sql.Date)
     java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
     String currentDate = sqlDate.toString(); // Convert to string (yyyy-MM-dd) format
     
@@ -27,11 +24,9 @@
     String errorMessage = null;
 
     try {
-        // Establish connection
         ApplicationDB db = new ApplicationDB();
         conn = db.getConnection();
 
-        // Query to fetch current and past reservations for the logged-in user, with additional data about transit line and stations
         String sql = "SELECT r.rid, r.total_fare, r.date_made, r.canceled, r.trip_type, r.travel_date, " +
                      "       t.transit_line, " +
                      "       os.name AS origin_station_name, os.city AS origin_city, " +
@@ -47,7 +42,6 @@
         ps.setString(1, username);
         rs = ps.executeQuery();
 
-        // Process the result set and separate current and past reservations
         while (rs.next()) {
             Map<String, Object> reservation = new HashMap<>();
             reservation.put("rid", rs.getInt("rid"));
@@ -63,7 +57,6 @@
             reservation.put("travel_date", rs.getString("travel_date"));
             reservation.put("departure_time", rs.getString("departure_time"));
             
-            // Separate into current and past reservations
             if (currentDate.compareTo(reservation.get("travel_date").toString()) <= 0) {
                 currentReservations.add(reservation);
             } else {

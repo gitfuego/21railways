@@ -74,24 +74,6 @@ create table Stops (
 ) engine = InnoDB;
 
 
--- create table Reservation (
--- 	rid int primary key, 
---     passenger varchar(50),
--- 	total_fare double, 
---     schedule_id int,
---     origin_id int,
---     destination_id int,
---     date_made datetime, 
--- 	canceled boolean, 
---     oversees varchar(50), 
---     trip_type enum('oneway', 'roundtrip'),
---     foreign key (origin_id) references Station(sid),
---     foreign key (destination_id) references Station(sid),
--- 	foreign key (schedule_id) references Tschedule(schedule_id),
---     foreign key (passenger) references Customer(username), 
--- 	foreign key (oversees) references Employee(username)
--- ) engine = InnoDB;
-
 create table Reservation (
     rid int primary key auto_increment, 
     passenger varchar(50),
@@ -125,19 +107,7 @@ CREATE TABLE Questions (
 )engine = InnoDB ;
 
 
--- -----------------------------------------------
---	Data Insertion								--
--- -----------------------------------------------
 
-#Atlantic City Line, Bergen County Line, Gladstone Branch, Main Line, 
-#Meadowlands Rail Line, Montclair-Boonton Line, Morristown Line, 
-#Northeast Corridor Line, North Jersey Coastal Line, Pascack Valley Line, 
-#Raritan Valley Line
-
--- ------------------------------------------------
---	(sid int, name varchar, city varchar, state varchar)
-	--									 --
--- ------------------------------------------------
 
 insert into Station (name, city, state) Values
   ('Atlantic City Station', 'Atlantic City', 'NJ'),
@@ -467,7 +437,8 @@ Insert into Tschedule (transit_line, origin_id, destination_id, base_fare, origi
 ('Atlantic City Line', '1', '9', '12.35', '2024-12-11 08:38:00', '2024-12-11 10:15:00', '2390'),
 ('Atlantic City Line', '9', '1', '12.35', '2024-12-11 02:55:00', '2024-12-11 04:34:00', '8981'),
 ('Atlantic City Line', '1', '9', '12.35', '2024-12-12 09:38:00', '2024-12-12 11:15:00', '2390'),
-('Atlantic City Line', '9', '1', '12.35', '2024-12-12 04:55:00', '2024-12-12 06:34:00', '8981');
+('Atlantic City Line', '9', '1', '12.35', '2024-12-12 04:55:00', '2024-12-12 06:34:00', '8981'),
+('Atlantic City Line', '1', '9', '12.35', '2024-12-10 05:38:00', '2024-12-10 07:15:00', '2390');
 
 
 
@@ -484,7 +455,8 @@ insert into Reservation (
     arrival_time,
     trip_type,
     total_fare) Values
-('user1', '2024-12-10', 'Atlantic City Line', 2390, 49, 1, 6, '2024-12-11', '05:38:00' , '06:30:00', 'oneway', 6.00);
+('user1', '2024-12-10', 'Atlantic City Line', 2390, 49, 1, 6, '2024-12-11', '05:38:00' , '06:30:00', 'oneway', 6.00),
+('user1', '2024-12-09', 'Atlantic City Line', 2390, 49, 1, 6, '2024-12-10', '05:38:00' , '06:30:00', 'oneway', 6.00);
 
 
 

@@ -73,7 +73,7 @@
         while (rs.next()) {
             Map<String, String> stop = new HashMap<>();
             stop.put("stop_sequence_num", String.valueOf(rs.getInt("stop_sequence_num")));
-            stop.put("station_id", String.valueOf(rs.getInt("sid")));  // Add station_id
+            stop.put("station_id", String.valueOf(rs.getInt("sid"))); 
             stop.put("station_name", rs.getString("name"));
             stop.put("city", rs.getString("city"));
             stop.put("state", rs.getString("state"));

@@ -72,7 +72,7 @@
 
             try {
                 con = db.getConnection();
-                // Query the schedule info
+                
                 String scheduleSql = "SELECT transit_line, origin_id, destination_id, base_fare, origin_departure, destination_arrival, train_id "
                                    + "FROM Tschedule WHERE schedule_id = ?";
                 ps = con.prepareStatement(scheduleSql);
@@ -90,7 +90,6 @@
                 rs.close();
                 ps.close();
 
-                // If no record found for this schedule_id
                 if (transitLine == null) {
 %>
                 <h2>Schedule not found. <a href="searchSchedules.jsp">Go back</a></h2>
@@ -119,7 +118,6 @@
                     rs.close();
                     ps.close();
 
-                    // Query stops
                     String stopsSql = "SELECT s.stop_sequence_num, st.name, st.city, st.state, s.arrival, s.departure "
                                      + "FROM Stops s JOIN Station st ON s.station_id = st.sid "
                                      + "WHERE s.schedule_id = ? ORDER BY s.stop_sequence_num";

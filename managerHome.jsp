@@ -65,8 +65,6 @@
             <a href="listRevenue.jsp" class="nav-link">List Revenue</a>
             <a href="bestCustomer.jsp" class="nav-link">Best Customer</a>
             <a href="bestTransitLines.jsp" class="nav-link">Best Transit Lines</a>
-            <a href="browseSchedules.jsp" class="nav-link">Browse Schedules</a>
-            <a href="generateReports.jsp" class="nav-link">Generate Reports</a>
             <a id='logoutBtn' href="logout.jsp" class="nav-link">Log Out</a>
         </section>
 

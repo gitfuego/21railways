@@ -8,7 +8,7 @@
     String role = (String) session.getAttribute("role");
 
     if (user == null || !"manager".equalsIgnoreCase(role)) {
-        response.sendRedirect("login.jsp"); // Redirect to login if not authorized
+        response.sendRedirect("login.jsp");
         return;
     }
 
@@ -20,7 +20,6 @@
         ApplicationDB db = new ApplicationDB();
         conn = db.getConnection();
 
-        // Query to find the best customer
         String query = "SELECT c.username, CONCAT(c.fname, ' ', c.name) AS full_name, SUM(r.total_fare) AS total_paid " +
                        "FROM Reservation r " +
                        "JOIN Customer c ON r.passenger = c.username " +
@@ -40,7 +39,7 @@
         }
     } catch (Exception e) {
         message = "Error retrieving best customer data: " + e.getMessage();
-        e.printStackTrace(); // Log error for debugging
+        e.printStackTrace();
     } finally {
         try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
         try { if (ps != null) ps.close(); } catch (SQLException e) { e.printStackTrace(); }

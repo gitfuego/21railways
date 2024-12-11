@@ -73,7 +73,6 @@
 </head>
 <body>
 <%
-    // Check if manager is logged in
     String user = (String) session.getAttribute("user");
     String role = (String) session.getAttribute("role");
     if (user == null || !"customer".equalsIgnoreCase(role)) {
@@ -97,7 +96,6 @@
                 <select name="origin" id="origin">
                     <option value="">Select Origin Station</option>
                     <%
-                        // Fetching station IDs for origin dropdown from the database
                         ApplicationDB db = new ApplicationDB();
                         Connection conn = null;
                         PreparedStatement stmt = null;
@@ -176,7 +174,6 @@
 
 <%
     if (sortBy != null && !sortBy.isEmpty()) {
-        // Build SQL query
         StringBuilder sql = new StringBuilder(
           "SELECT schedule_id, transit_line, origin_id, destination_id, base_fare, origin_departure, destination_arrival "
           + "FROM Tschedule WHERE 1=1 ");
@@ -194,7 +191,6 @@
         }
 
         if (travelDate != null && !travelDate.trim().isEmpty()) {
-            // Assuming travelDate is in YYYY-MM-DD format
             sql.append(" AND DATE(origin_departure) = ? ");
             params.add(travelDate);
         }
@@ -215,7 +211,6 @@
         try {
             con = db2.getConnection();
             ps2 = con.prepareStatement(sql.toString());
-            // Set parameters
             int idx = 1;
             for (Object param : params) {
                 if (param instanceof Integer) {
@@ -233,7 +228,6 @@
                 row.put("origin_departure", rs2.getTimestamp("origin_departure"));
                 row.put("destination_arrival", rs2.getTimestamp("destination_arrival"));
                 row.put("base_fare", rs2.getDouble("base_fare"));
-                // Add more fields if needed
                 results.add(row);
             }
         } catch (SQLException e) {
@@ -280,7 +274,7 @@
         </table>
 <%
         }
-    } // end if sortBy != null
+    }
 %>
 
     <p style="text-align:center;"><a href="customerHome.jsp" class="nav-link">Back to Customer Home</a></p>

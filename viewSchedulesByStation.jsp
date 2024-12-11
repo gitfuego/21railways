@@ -14,7 +14,6 @@
         ApplicationDB db = new ApplicationDB();
         conn = db.getConnection();
 
-        // Fetch all station names
         stmt = conn.prepareStatement("SELECT name FROM Station");
         rs = stmt.executeQuery();
         while (rs.next()) {
@@ -23,7 +22,6 @@
         rs.close();
         stmt.close();
 
-        // Fetch schedules if a station is selected
         if (selectedStation != null && !selectedStation.trim().isEmpty()) {
             stmt = conn.prepareStatement(
                 "SELECT Tschedule.schedule_id, Tschedule.transit_line, " +
@@ -127,7 +125,6 @@
 <body>
     <h1>View Schedules for a Station</h1>
 
-    <!-- Dropdown to select station name -->
     <form method="GET" action="viewSchedulesByStation.jsp">
         <label for="stationName">Select a Station:</label>
         <select name="stationName" required>

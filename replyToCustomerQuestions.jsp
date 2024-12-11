@@ -5,7 +5,6 @@
     String selectedQuestionId = request.getParameter("questionId");
     String message = "";
 
-    // Retrieve all questions that have not been answered
     try {
         ApplicationDB db = new ApplicationDB();
         Connection conn = db.getConnection();
@@ -26,7 +25,6 @@
         message = "Error: " + e.getMessage();
     }
 
-    // If the questionId is provided, process the answer submission
     if (selectedQuestionId != null && request.getParameter("answer") != null && !request.getParameter("answer").trim().isEmpty()) {
         try {
             String answer = request.getParameter("answer");

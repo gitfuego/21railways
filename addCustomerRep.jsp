@@ -3,14 +3,12 @@
 <%@ page import="com.cs336.pkg.ApplicationDB" %>
 <%@ page import="java.util.*" %>
 <%
-    // Check if the user is a manager
     String role = (String) session.getAttribute("role");
     if (role == null || !role.equals("manager")) {
-        response.sendRedirect("login.jsp"); // Redirect to login if not authorized
+        response.sendRedirect("login.jsp");
         return;
     }
 
-    // Access form parameters
     String username = request.getParameter("username");
     String fname = request.getParameter("fname");
     String name = request.getParameter("name");
@@ -29,7 +27,6 @@
             ApplicationDB db = new ApplicationDB();
             con = db.getConnection();
 
-            // Insert new customer representative
             String sql = "INSERT INTO Employee (username, password, ssn, fname, name, role) VALUES (?, ?, ?, ?, ?, 'customer_rep')";
             ps = con.prepareStatement(sql);
             ps.setString(1, username);

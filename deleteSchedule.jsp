@@ -57,17 +57,14 @@
         } else {
             int scheduleId = Integer.parseInt(scheduleIdParam);
 
-            // Check if form submitted for deletion
             String confirmDelete = request.getParameter("confirm");
             if (confirmDelete != null && confirmDelete.equals("yes")) {
-                // Perform delete
+
                 ApplicationDB db = new ApplicationDB();
                 Connection con = null;
                 PreparedStatement ps = null;
                 try {
                     con = db.getConnection();
-                    // If foreign keys exist (e.g. in Stops or Reservation), delete them first if needed
-                    // For now, assume direct delete is possible.
                     String delSQL = "DELETE FROM Tschedule WHERE schedule_id=?";
                     ps = con.prepareStatement(delSQL);
                     ps.setInt(1, scheduleId);

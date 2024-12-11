@@ -8,7 +8,7 @@
     String role = (String) session.getAttribute("role");
 
     if (user == null || !"manager".equalsIgnoreCase(role)) {
-        response.sendRedirect("login.jsp"); // Redirect to login if not authorized
+        response.sendRedirect("login.jsp");
         return;
     }
 
@@ -20,7 +20,6 @@
         ApplicationDB db = new ApplicationDB();
         conn = db.getConnection();
 
-        // Query to find the top 5 most active transit lines
         String query = "SELECT ts.transit_line AS transit_line, COUNT(r.rid) AS reservation_count " +
                        "FROM Reservation r " +
                        "JOIN Tschedule ts ON r.schedule_id = ts.schedule_id " +
@@ -44,7 +43,7 @@
         }
     } catch (Exception e) {
         message = "Error retrieving transit line data: " + e.getMessage();
-        e.printStackTrace(); // Log error for debugging
+        e.printStackTrace();
     } finally {
         try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
         try { if (ps != null) ps.close(); } catch (SQLException e) { e.printStackTrace(); }

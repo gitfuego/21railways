@@ -49,7 +49,6 @@
     <h2>You are not authorized to access this page. Please <a href="login.jsp">log in</a>.</h2>
 <%
     } else {
-        // Database connection
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -60,7 +59,7 @@
         try {
             ApplicationDB db = new ApplicationDB();
             con = db.getConnection();
-            // Query to calculate revenue by month
+            
             String query = "SELECT DATE_FORMAT(date_made, '%Y-%m') AS month, SUM(total_fare) AS revenue " +
                            "FROM Reservation WHERE canceled = FALSE " +
                            "GROUP BY DATE_FORMAT(date_made, '%Y-%m') " +

@@ -51,7 +51,6 @@
     } catch (Exception e) {
         out.println("Error: " + e.getMessage());
     } finally {
-        // Close database resources
         try {
             if (rs != null) rs.close();
             if (ps != null) ps.close();

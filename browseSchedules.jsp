@@ -53,7 +53,6 @@
 </head>
 <body>
 <%
-    // Check if manager is logged in
     String user = (String) session.getAttribute("user");
     String role = (String) session.getAttribute("role");
     if (user == null || !"customer".equalsIgnoreCase(role)) {
@@ -61,7 +60,6 @@
     <h2>You are not authorized to access this page. Please <a href="login.jsp">log in</a>.</h2>
 <%
     } else {
-        // Load stations from the database
         List<String[]> stations = new ArrayList<>();
         ApplicationDB db = new ApplicationDB();
         Connection con = null;
@@ -74,7 +72,6 @@
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                // We'll store each station as an array: [sid, name]
                 String sid = String.valueOf(rs.getInt("sid"));
                 String stationName = rs.getString("name") + " (" + rs.getString("city") + ", " + rs.getString("state") + ")";
                 stations.add(new String[]{sid, stationName});

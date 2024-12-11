@@ -20,7 +20,7 @@
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            session.setAttribute("user", userid); // Store username in session
+            session.setAttribute("user", userid);
             response.sendRedirect("success.jsp");
         } else {
             out.println("Invalid credentials. <a href='login.jsp'>Try again</a>");

@@ -3,14 +3,14 @@
 <%@ page import="com.cs336.pkg.ApplicationDB" %>
 <%@ page import="java.util.*" %>
 <%
-    // Check if the user is a manager
+
     String role = (String) session.getAttribute("role");
     if (role == null || !role.equals("manager")) {
         response.sendRedirect("login.jsp"); // Redirect to login if not authorized
         return;
     }
 
-    // Access parameters
+
     String username = request.getParameter("username");
     String fname = request.getParameter("fname");
     String name = request.getParameter("name");
@@ -47,7 +47,6 @@
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
         }
     } else {
-        // Fetch the existing data for the customer representative
         try {
             ApplicationDB db = new ApplicationDB();
             con = db.getConnection();

@@ -2,19 +2,15 @@
 <%@ page import="java.sql.*, javax.servlet.http.*, javax.servlet.*"%>
 <%@ page import="com.cs336.pkg.ApplicationDB" %>
 <%
-    // Retrieve the reservation ID from the request
     String ridStr = request.getParameter("rid");
 
-    // Retrieve the username from the session
     String username = (String) session.getAttribute("user");
 
-    // Check if the user is logged in
     if (username == null) {
         response.sendRedirect("login.jsp"); // Redirect to login if not logged in
         return;
     }
 
-    // Access the shared database connection
     Connection con = null;
     PreparedStatement ps = null;
     String message = null;
@@ -26,7 +22,7 @@
         try {
             ApplicationDB db = new ApplicationDB();
             con = db.getConnection();
-            // Verify that the reservation belongs to the user and is not already canceled
+
             String checkSql = "SELECT canceled FROM Reservation WHERE rid = ? AND passenger = ?";
             ps = con.prepareStatement(checkSql);
             ps.setInt(1, rid);
@@ -40,7 +36,6 @@
                 if (canceled) {
                     message = "This reservation has already been canceled.";
                 } else {
-                    // Update the reservation as canceled
                     String updateSql = "UPDATE Reservation SET canceled = TRUE WHERE rid = ?";
                     ps = con.prepareStatement(updateSql);
                     ps.setInt(1, rid);
