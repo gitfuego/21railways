@@ -181,7 +181,10 @@
         <%
             }
         %>
-        <p style="text-align:center;"><a href="searchSchedules.jsp" class="nav-link">Back to Search Results</a></p>
+        <p style="text-align:center;">
+            <a href="javascript:history.back()" class="nav-link">Back to Search Results</a>
+        </p>
+        
 <%
                 }
             } catch (SQLException e) {

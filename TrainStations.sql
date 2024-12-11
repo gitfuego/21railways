@@ -9,9 +9,7 @@ drop table if exists Station;
 drop table if exists Train;
 drop table if exists Questions;
 
--- -----------------------------------------------
---	Station										--
--- -----------------------------------------------
+
 
 create table Station (
 	sid int auto_increment primary key, 
@@ -20,17 +18,13 @@ create table Station (
     state varchar(50)
 ) engine = InnoDB;
 
--- -----------------------------------------------
---	Train									    --
--- -----------------------------------------------
+
 
 create table Train (  				
 	tid int primary key
 )engine = InnoDB;
 
--- -----------------------------------------------
---	Customer									--
--- -----------------------------------------------
+
 
 create table Customer (
 	username varchar(50) primary key, 
@@ -40,26 +34,22 @@ create table Customer (
     name varchar(50)
 ) engine = InnoDB;
 
--- -----------------------------------------------
---	Employee									--
--- -----------------------------------------------
+
 
 create table Employee (
 	username varchar(50) primary key, 
     password varchar(50), 
     ssn varchar(11), 
     fname varchar(50), 
-    lname varchar(50), 
+    name varchar(50), 
     role enum('manager', 'customer_rep')
 ) engine = InnoDB;
 
--- -----------------------------------------------
---	Train TSchedule								--
--- -----------------------------------------------
+
 
 create table Tschedule (
 	schedule_id int auto_increment primary key, 
-    transit_line varchar(50), -- Atlantic City Line, Bergen County Line, Gladstone Branch, Main Line, Meadowlands Rail Line, Montclair-Boonton Line, Morristown Line, Northeast Corridor Line, Nort Jersey Coastal Line, Pascack Valley Line, Port Jervis Line, Princeton Line, Raritan Valley Line.
+    transit_line varchar(50), 
     origin_id int,
     destination_id int, 
     base_fare double, 
@@ -71,9 +61,6 @@ create table Tschedule (
 	foreign key (train_id) references Train(tid)
     ) engine = InnoDB;
     
--- -----------------------------------------------
---	-- Stops										--
--- -----------------------------------------------
     
 create table Stops (
     stop_id int primary key, 
@@ -85,9 +72,7 @@ create table Stops (
     foreign key (station_id) references Station(sid), 
     foreign key (schedule_id) references Tschedule(schedule_id)
 ) engine = InnoDB;
--- -----------------------------------------------
---	-- Reservation									--
--- -----------------------------------------------
+
 
 -- create table Reservation (
 -- 	rid int primary key, 
@@ -408,14 +393,6 @@ insert into Customer Values
     ('user14', 'secure14', 'user14@example.com', 'Nicole', 'Jackson'),
     ('user15', 'mypass789', 'user15@example.com', 'Kevin', 'White');
     
-    -- --------------------------------------------------------
-    -- 	username varchar(50) primary key, 
-    -- password varchar(50), 
-    -- ssn int, 
-    -- fname varchar(50), 
-    -- lname varchar(50), 
-    -- role enum('manager', 'customer_rep')
-    -- --------------------------------------------------------
 
 insert into Employee values
 	('mcarpenter', 'group21!', '111-11-1111', 'Marcus', 'Carpenter', 'manager'),
@@ -433,21 +410,6 @@ insert into Employee values
     ('nanderson', 'mypass1515', '669-87-6543', 'Nancy', 'Anderson', 'customer_rep'),
     ('othomas', 'pass1616', '000-56-7934', 'Omar', 'Thomas', 'customer_rep');
 
-#insert into TSchedule Values 	
-#schedule_id int auto_increment primary key, 
- #   transit_line varchar(50), -- Atlantic City Line, Bergen County Line, Gladstone Branch, Main Line, Meadowlands Rail Line, Montclair-Boonton Line, Morristown Line, Northeast Corridor Line, Nort Jersey Coastal Line, Pascack Valley Line, Port Jervis Line, Princeton Line, Raritan Valley Line.
-  #  origin_id int,
-   # destination_id int, 
-    #base_fare double, 
-    #origin_departure datetime, 
-    #origin_arrival datetime,
-    #destination_departure datetime, 
-    #destination_arrival datetime,
-    #train_id int, 
-    #foreign key (origin_id) references Station(sid),
-    #foreign key (destination_id) references Station(sid)
-	#foreign key (train_id) references Train(tid)
-    #) engine = InnoDB;
 
 Insert into Tschedule (transit_line, origin_id, destination_id, base_fare, origin_departure, destination_arrival, train_id)  Values
 ('Raritan Valley Line', '76', '126', '18.65', '2024-12-11 05:51', '2024-12-11 07:42', '3824'),
@@ -501,22 +463,11 @@ Insert into Tschedule (transit_line, origin_id, destination_id, base_fare, origi
 ('Atlantic City Line', '1', '9', '12.35', '2024-12-11 05:38:00', '2024-12-11 07:15:00', '2390'),
 ('Atlantic City Line', '9', '1', '12.35', '2024-12-11 01:55:00', '2024-12-11 03:34:00', '8981'),
 ('Atlantic City Line', '1', '9', '12.35', '2024-12-12 05:38:00', '2024-12-12 07:15:00', '2390'),
-('Atlantic City Line', '9', '1', '12.35', '2024-12-12 01:55:00', '2024-12-12 03:34:00', '8981');
-
---  Stops     --          
--- -----------------------------------------------
-
-
-
--- -----------------------------------------------
---    Reservation                                   --
--- -----------------------------------------------
-
-#Reservation should include most information from Tschedule except all the stops information --> Just needs to know what time the origin departs and destination_arrival
-
-#rid, passenger, trip type, fare, schedule_id, transit line,  ti origin id, destination id, departure time, arrival time, 
-
--- > rid, passenger, date_made, transit_line, train_id, schedule_id, origin_id, dest_id, travel_date, departure time, arrival time, trip type, fare
+('Atlantic City Line', '9', '1', '12.35', '2024-12-12 01:55:00', '2024-12-12 03:34:00', '8981'),
+('Atlantic City Line', '1', '9', '12.35', '2024-12-11 08:38:00', '2024-12-11 10:15:00', '2390'),
+('Atlantic City Line', '9', '1', '12.35', '2024-12-11 02:55:00', '2024-12-11 04:34:00', '8981'),
+('Atlantic City Line', '1', '9', '12.35', '2024-12-12 09:38:00', '2024-12-12 11:15:00', '2390'),
+('Atlantic City Line', '9', '1', '12.35', '2024-12-12 04:55:00', '2024-12-12 06:34:00', '8981');
 
 
 
@@ -533,14 +484,12 @@ insert into Reservation (
     arrival_time,
     trip_type,
     total_fare) Values
-('user1', '2024-12-10', 'Atlantic City Line', 2390, '49', 1, 6, '2024-12-11', '05:38:00' , '06:30:00', 'oneway', 6.00);
-
-#rid, passenger, date_made, transit_line, train_id, schedule_id, origin_id, dest_id, travel_date, departure time, arrival time, trip type, fare
+('user1', '2024-12-10', 'Atlantic City Line', 2390, 49, 1, 6, '2024-12-11', '05:38:00' , '06:30:00', 'oneway', 6.00);
 
 
 
 insert into Stops Values
-('1', '1', '49', '1', '2024-12-11 05:38:00', NULL),
+('1', '1', '49', '1', NULL, '2024-12-11 05:38:00'),
 ('2', '2', '49', '2', '2024-12-11 05:49:00', '2024-12-11 05:49:00'),
 ('3', '3', '49', '3', '2024-12-11 05:59:00', '2024-12-11 05:59:00'),
 ('4', '4', '49', '4', '2024-12-11 06:10:00', '2024-12-11 06:10:00'),
@@ -548,5 +497,5 @@ insert into Stops Values
 ('6', '6', '49', '6', '2024-12-11 06:30:00', '2024-12-11 06:30:00'),
 ('7', '7', '49', '7', '2024-12-11 06:44:00', '2024-12-11 06:44:00'),
 ('8', '8', '49', '8', '2024-12-11 06:51:00', '2024-12-11 06:51:00'),
-('9', '9', '49', '9', NULL, '2024-12-11 07:15:00' );
+('9', '9', '49', '9', '2024-12-11 07:15:00',  NULL );
 

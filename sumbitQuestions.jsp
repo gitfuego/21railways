@@ -36,6 +36,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Customer Ask a Question</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .nav-link {
+            margin: 10px;
+            display: inline-block;
+            padding: 10px;
+            background-color: lightblue;
+            text-decoration: none;
+            color: black;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background-color: lightcoral;
+        }
+    </style>
 </head>
 <body>
     <h1>Ask a Question</h1>
@@ -46,5 +63,7 @@
     </form>
 
     <p><%= message %></p>
+
+    <p><a href="customerHome.jsp" class="nav-link">Back to Customer Home</a></p>
 </body>
 </html>

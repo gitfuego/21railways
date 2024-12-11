@@ -81,27 +81,77 @@
     <h2>You are not authorized to view this page. Please <a href="login.jsp">log in</a>.</h2>
 <%
     } else {
-        // Retrieve parameters if any
+
         String originParam = request.getParameter("origin");
         String destinationParam = request.getParameter("destination");
         String travelDate = request.getParameter("travelDate");
         String sortBy = request.getParameter("sortBy");
 
-        // We'll only execute a search if at least one parameter is present or form is submitted
-        // Otherwise, we just show the form.
 %>
     <h1>Search Train Schedules</h1>
 
     <div class="form-container">
         <form action="searchSchedules.jsp" method="get">
             <div>
-                <label for="origin">Origin Station (ID):</label>
-                <input type="text" name="origin" id="origin" placeholder="e.g. 1">
+                <label for="origin">Origin Station (City + Name):</label>
+                <select name="origin" id="origin">
+                    <option value="">Select Origin Station</option>
+                    <%
+                        // Fetching station IDs for origin dropdown from the database
+                        ApplicationDB db = new ApplicationDB();
+                        Connection conn = null;
+                        PreparedStatement stmt = null;
+                        ResultSet rs = null;
+                        try {
+                            conn = db.getConnection();
+                            String query = "SELECT sid, name, city FROM Station ORDER BY city ASC, name ASC";
+                            stmt = conn.prepareStatement(query);
+                            rs = stmt.executeQuery();
+                            while (rs.next()) {
+                                String stationName = rs.getString("name");
+                                String city = rs.getString("city");
+                                int stationId = rs.getInt("sid");
+                    %>
+                                <option value="<%= stationId %>"><%= city %> - <%= stationName %></option>
+                    <%
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        } finally {
+                            if (rs != null) try { rs.close(); } catch(SQLException ignored){}
+                            if (stmt != null) try { stmt.close(); } catch(SQLException ignored){}
+                            if (conn != null) db.closeConnection(conn);
+                        }
+                    %>
+                </select>
             </div>
 
             <div>
-                <label for="destination">Destination Station (ID):</label>
-                <input type="text" name="destination" id="destination" placeholder="e.g. 2">
+                <label for="destination">Destination Station (City + Name):</label>
+                <select name="destination" id="destination">
+                    <option value="">Select Destination Station</option>
+                    <%
+                        try {
+                            conn = db.getConnection();
+                            stmt = conn.prepareStatement("SELECT sid, name, city FROM Station ORDER BY city ASC, name ASC");
+                            rs = stmt.executeQuery();
+                            while (rs.next()) {
+                                String stationName = rs.getString("name");
+                                String city = rs.getString("city");
+                                int stationId = rs.getInt("sid");
+                    %>
+                                <option value="<%= stationId %>"><%= city %> - <%= stationName %></option>
+                    <%
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        } finally {
+                            if (rs != null) try { rs.close(); } catch(SQLException ignored){}
+                            if (stmt != null) try { stmt.close(); } catch(SQLException ignored){}
+                            if (conn != null) db.closeConnection(conn);
+                        }
+                    %>
+                </select>
             </div>
 
             <div>
@@ -125,7 +175,6 @@
     </div>
 
 <%
-    // If the user submitted the form (e.g., sortBy won't be null after submission)
     if (sortBy != null && !sortBy.isEmpty()) {
         // Build SQL query
         StringBuilder sql = new StringBuilder(
@@ -150,49 +199,48 @@
             params.add(travelDate);
         }
 
-        // Validate sortBy to prevent SQL injection
         if (sortBy.equals("origin_departure") || sortBy.equals("destination_arrival") || sortBy.equals("base_fare")) {
-            sql.append(" ORDER BY ").append(sortBy);
+            sql.append(" ORDER BY ").append(sortBy).append(" DESC");
         } else {
-            sql.append(" ORDER BY origin_departure");
+            sql.append(" ORDER BY origin_departure DESC");
         }
 
-        ApplicationDB db = new ApplicationDB();
+        ApplicationDB db2 = new ApplicationDB();
         Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        PreparedStatement ps2 = null;
+        ResultSet rs2 = null;
 
         List<Map<String,Object>> results = new ArrayList<>();
 
         try {
-            con = db.getConnection();
-            ps = con.prepareStatement(sql.toString());
+            con = db2.getConnection();
+            ps2 = con.prepareStatement(sql.toString());
             // Set parameters
             int idx = 1;
             for (Object param : params) {
                 if (param instanceof Integer) {
-                    ps.setInt(idx++, (Integer)param);
+                    ps2.setInt(idx++, (Integer)param);
                 } else if (param instanceof String) {
-                    ps.setString(idx++, (String)param);
+                    ps2.setString(idx++, (String)param);
                 }
             }
-            rs = ps.executeQuery();
+            rs2 = ps2.executeQuery();
 
-            while (rs.next()) {
+            while (rs2.next()) {
                 Map<String,Object> row = new HashMap<>();
-                row.put("schedule_id", rs.getInt("schedule_id"));
-                row.put("transit_line", rs.getString("transit_line"));
-                row.put("origin_departure", rs.getTimestamp("origin_departure"));
-                row.put("destination_arrival", rs.getTimestamp("destination_arrival"));
-                row.put("base_fare", rs.getDouble("base_fare"));
+                row.put("schedule_id", rs2.getInt("schedule_id"));
+                row.put("transit_line", rs2.getString("transit_line"));
+                row.put("origin_departure", rs2.getTimestamp("origin_departure"));
+                row.put("destination_arrival", rs2.getTimestamp("destination_arrival"));
+                row.put("base_fare", rs2.getDouble("base_fare"));
                 // Add more fields if needed
                 results.add(row);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try { rs.close(); } catch(SQLException ignored){}
-            if (ps != null) try { ps.close(); } catch(SQLException ignored){}
+            if (rs2 != null) try { rs2.close(); } catch(SQLException ignored){}
+            if (ps2 != null) try { ps2.close(); } catch(SQLException ignored){}
             if (con != null) db.closeConnection(con);
         }
 
@@ -202,13 +250,14 @@
 <%
         } else {
 %>
-        <<table>
+        <table>
             <tr>
                 <th>Transit Line</th>
                 <th>Origin Departure</th>
                 <th>Destination Arrival</th>
                 <th>Fare</th>
                 <th>Details</th>
+                <th>Book Reservation</th>
             </tr>
             <%
                 for (Map<String,Object> row : results) {
@@ -218,20 +267,23 @@
                 <td><%= row.get("origin_departure") %></td>
                 <td><%= row.get("destination_arrival") %></td>
                 <td>$<%= row.get("base_fare") %></td>
-                <!-- Insert the View Details link here, passing the schedule_id as a parameter -->
                 <td><a href="viewScheduleDetails.jsp?schedule_id=<%= row.get("schedule_id") %>">View Details</a></td>
+                <td>
+                    <a href="bookReservation.jsp?schedule_id=<%= row.get("schedule_id") %>">
+                        <button>Book Reservation</button>
+                    </a>
+                </td>
             </tr>
             <%
                 }
             %>
         </table>
-        
 <%
         }
     } // end if sortBy != null
 %>
 
-    <p style="text-align:center;"><a href="managerHome.jsp" class="nav-link">Back to Manager Home</a></p>
+    <p style="text-align:center;"><a href="customerHome.jsp" class="nav-link">Back to Customer Home</a></p>
 
 <%
     }
