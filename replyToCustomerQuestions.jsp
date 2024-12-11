@@ -55,9 +55,76 @@
 <head>
     <meta charset="UTF-8">
     <title>Reply to Customer Question</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .nav-link {
+            margin: 10px;
+            display: inline-block;
+            padding: 10px;
+            background-color: lightgreen;
+            text-decoration: none;
+            color: black;
+            border-radius: 5px;
+        }
+
+        .nav-link:hover {
+            background-color: lightyellow;
+        }
+
+        .form-container {
+            margin: 20px;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+            margin-bottom: 10px;
+        }
+
+        select, input[type="date"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .submit-button {
+            padding: 10px 20px;
+            background-color: lightgreen;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: lightcoral;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <h1>Reply to Customer Question</h1>
+
+    <p style="text-align:center;"><a href="customerRepHome.jsp" class="nav-link">Back to Home</a></p>
 
     <h3>Select a Question to Answer:</h3>
     <form method="GET" action="replyToCustomerQuestions.jsp">

@@ -104,7 +104,7 @@ CREATE TABLE Questions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     answered BOOLEAN DEFAULT FALSE,
     answer TEXT
-)engine = InnoDB ;
+) engine = InnoDB;
 
 
 
@@ -443,7 +443,7 @@ Insert into Tschedule (transit_line, origin_id, destination_id, base_fare, origi
 
 
 insert into Reservation (
-	passenger,
+    passenger,
     date_made,
     transit_line,
     train_id,
@@ -455,8 +455,30 @@ insert into Reservation (
     arrival_time,
     trip_type,
     total_fare) Values
-('user1', '2024-12-10', 'Atlantic City Line', 2390, 49, 1, 6, '2024-12-11', '05:38:00' , '06:30:00', 'oneway', 6.00),
-('user1', '2024-12-09', 'Atlantic City Line', 2390, 49, 1, 6, '2024-12-10', '05:38:00' , '06:30:00', 'oneway', 6.00);
+('user1', '2024-12-10', 'Raritan Valley Line', 3824, 1, 76, 126, '2024-12-11', '05:51:00', '07:42:00', 'oneway', 6.00),
+('user1', '2024-12-09', 'Raritan Valley Line', 1189, 2, 126, 76, '2024-12-10', '06:41:00', '08:31:00', 'oneway', 6.00),
+('user2', '2024-12-11', 'Morristown Line', 1493, 5, 69, 123, '2024-12-12', '06:45:00', '08:59:00', 'roundtrip', 18.40),
+('user2', '2024-12-11', 'Morristown Line', 1401, 6, 69, 79, '2024-12-12', '06:45:00', '08:34:00', 'roundtrip', 13.80),
+('user3', '2024-12-12', 'Montclair-Boonton Line', 1532, 11, 69, 123, '2024-12-13', '06:45:00', '08:59:00', 'oneway', 18.40),
+('user3', '2024-12-12', 'Montclair-Boonton Line', 2379, 12, 69, 79, '2024-12-13', '05:04:00', '07:00:00', 'oneway', 13.80),
+('user4', '2024-12-13', 'Main Line', 1088, 16, 140, 79, '2024-12-14', '03:44:00', '06:11:00', 'roundtrip', 20.25),
+('user4', '2024-12-13', 'Main Line', 6026, 17, 79, 140, '2024-12-14', '04:07:00', '06:18:00', 'roundtrip', 20.25),
+('user5', '2024-12-14', 'Bergen Line', 3343, 21, 140, 79, '2024-12-15', '06:03:00', '08:26:00', 'oneway', 20.25),
+('user5', '2024-12-14', 'Bergen Line', 3316, 22, 79, 140, '2024-12-15', '09:47:00', '12:21:00', 'oneway', 20.25),
+('user6', '2024-12-15', 'Pascack Valley Line', 3397, 27, 164, 79, '2024-12-16', '10:55:00', '12:05:00', 'roundtrip', 9.75),
+('user6', '2024-12-15', 'Pascack Valley Line', 3515, 28, 79, 164, '2024-12-16', '07:28:00', '08:39:00', 'roundtrip', 9.75),
+('user7', '2024-12-16', 'Gladstone Branch', 3875, 32, 65, 123, '2024-12-17', '02:54:00', '04:52:00', 'oneway', 18.40),
+('user7', '2024-12-16', 'Gladstone Branch', 3820, 33, 65, 79, '2024-12-17', '06:50:00', '08:13:00', 'oneway', 13.80),
+('user8', '2024-12-17', 'Northeast Corridor', 3984, 37, 169, 123, '2024-12-18', '07:11:00', '08:23:00', 'roundtrip', 19.25),
+('user8', '2024-12-17', 'Northeast Corridor', 4468, 38, 123, 169, '2024-12-18', '02:01:00', '01:35:00', 'roundtrip', 19.25),
+('user9', '2024-12-18', 'North Jersey Coast Line', 4624, 43, 21, 126, '2024-12-19', '10:09:00', '12:34:00', 'oneway', 19.25),
+('user9', '2024-12-18', 'North Jersey Coast Line', 5055, 44, 126, 21, '2024-12-19', '05:01:00', '07:07:00', 'oneway', 19.25),
+('user10', '2024-12-19', 'Atlantic City Line', 2390, 49, 1, 9, '2024-12-20', '05:38:00', '07:15:00', 'oneway', 12.35),
+('user10', '2024-12-19', 'Atlantic City Line', 8981, 50, 9, 1, '2024-12-20', '01:55:00', '03:34:00', 'oneway', 12.35),
+('user11', '2024-12-20', 'Atlantic City Line', 2390, 51, 1, 9, '2024-12-21', '05:38:00', '07:15:00', 'roundtrip', 12.35),
+('user11', '2024-12-20', 'Atlantic City Line', 8981, 52, 9, 1, '2024-12-21', '01:55:00', '03:34:00', 'roundtrip', 12.35);
+
+
 
 
 

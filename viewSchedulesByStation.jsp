@@ -120,10 +120,25 @@
         h1, h2 {
             text-align: center;
         }
+
+        .nav-link {
+            margin: 10px;
+            display: inline-block;
+            padding: 10px;
+            background-color: lightgreen;
+            text-decoration: none;
+            color: black;
+            border-radius: 5px;
+        }
+
+        .nav-link:hover {
+            background-color: lightyellow;
+        }
     </style>
 </head>
 <body>
     <h1>View Schedules for a Station</h1>
+    <p style="text-align:center;"><a href="customerRepHome.jsp" class="nav-link">Back to Home</a></p>
 
     <form method="GET" action="viewSchedulesByStation.jsp">
         <label for="stationName">Select a Station:</label>

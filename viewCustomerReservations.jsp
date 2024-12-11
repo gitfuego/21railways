@@ -4,6 +4,7 @@
     String transitLine = request.getParameter("transitLine");
     String reservationDate = request.getParameter("reservationDate");
     ResultSet customerReservations = null;
+    ResultSet transitLinesResult = null;
     String message = "";
 
     if (transitLine != null && !transitLine.trim().isEmpty() && reservationDate != null && !reservationDate.trim().isEmpty()) {
@@ -28,6 +29,17 @@
             e.printStackTrace();
         }
     }
+
+    try {
+        ApplicationDB db = new ApplicationDB();
+        Connection conn = db.getConnection();
+        String transitLinesQuery = "SELECT DISTINCT transit_line FROM Tschedule";
+        PreparedStatement stmt = conn.prepareStatement(transitLinesQuery);
+        transitLinesResult = stmt.executeQuery();
+    } catch (SQLException e) {
+        message = "Error fetching transit lines: " + e.getMessage();
+        e.printStackTrace();
+    }
 %>
 
 <!DOCTYPE html>
@@ -43,13 +55,14 @@
             margin: 10px;
             display: inline-block;
             padding: 10px;
-            background-color: lightblue;
+            background-color: lightgreen;
             text-decoration: none;
             color: black;
             border-radius: 5px;
         }
+
         .nav-link:hover {
-            background-color: lightcoral;
+            background-color: lightyellow;
         }
 
         .form-container {
@@ -102,12 +115,29 @@
 </head>
 <body>
     <h1>Customer Reservations on a Transit Line</h1>
+    <p style="text-align:center;"><a href="customerRepHome.jsp" class="nav-link">Back to Home</a></p>
     <form method="GET" action="viewCustomerReservations.jsp">
         <label for="transitLine">Transit Line:</label>
-        <input type="text" name="transitLine" required><br>
+        <select name="transitLine" required>
+            <option value="">Select Transit Line</option>
+            <%
+                if (transitLinesResult != null) {
+                    while (transitLinesResult.next()) {
+                        String transitLineOption = transitLinesResult.getString("transit_line");
+                        %>
+                        <option value="<%= transitLineOption %>" <%= transitLine != null && transitLine.equals(transitLineOption) ? "selected" : "" %> >
+                            <%= transitLineOption %>
+                        </option>
+                        <%
+                    }
+                }
+            %>
+        </select><br>
+        
         <label for="reservationDate">Reservation Date (YYYY-MM-DD):</label>
-        <input type="date" name="reservationDate" required><br>
-        <input type="submit" value="Search">
+        <input type="date" name="reservationDate" value="<%= reservationDate != null ? reservationDate : "" %>" required><br>
+        
+        <input type="submit" value="Search" class="submit-button">
     </form>
 
     <% if (message != "") { %>
@@ -116,7 +146,7 @@
 
     <% if (customerReservations != null) { %>
         <h2>Reservations for Line: <%= transitLine %> on <%= reservationDate %></h2>
-        <table border="1">
+        <table>
             <tr>
                 <th>Username</th>
                 <th>First Name</th>

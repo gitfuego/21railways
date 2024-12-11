@@ -21,7 +21,6 @@ try {
     ApplicationDB db = new ApplicationDB();
     Connection con = db.getConnection();
 
-    // Check if the username already exists in the database
     PreparedStatement ps = con.prepareStatement("SELECT * FROM Customer WHERE username=?");
     ps.setString(1, userid);
     ResultSet rs = ps.executeQuery();

@@ -46,10 +46,46 @@
 <html>
 <head>
     <title>Manage Customer Representatives</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            border-collapse: collapse;
+            width: 60%;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+        .message {
+            text-align: center;
+            margin: 20px;
+            font-size: 18px;
+            color: red;
+        }
+        .back-link {
+            display: inline-block;
+            margin: 10px;
+            padding: 8px;
+            background-color: lightblue;
+            text-decoration: none;
+            color: black;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: lightcoral;
+        }
+    </style>
 </head>
 <body>
     <h1>Manage Customer Representatives</h1>
-    <a href="managerHome.jsp">Back to Manager Home</a>
+    <a href="managerHome.jsp" class="back-link">Back to Manager Home</a>
     <br/>
     <br/>
     <h2>Add New Customer Representative</h2>

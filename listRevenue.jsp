@@ -41,6 +41,18 @@
         .form-container button:hover {
             background-color: lightcoral;
         }
+       .back-link {
+            display: inline-block;
+            margin: 10px;
+            padding: 8px;
+            background-color: lightblue;
+            text-decoration: none;
+            color: black;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: lightcoral;
+        }
     </style>
 </head>
 <body>
@@ -100,6 +112,7 @@
             <button type="submit">View</button>
         </form>
     </div>
+    <p style="text-align:center;"><a href="managerHome.jsp" class="back-link">Back to Manager Home</a></p>
 <%
         if (errorMessage != null) {
 %>

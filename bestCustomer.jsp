@@ -75,6 +75,18 @@
             font-size: 18px;
             color: red;
         }
+        .back-link {
+            display: inline-block;
+            margin: 20px;
+            padding: 8px;
+            background-color: lightblue;
+            text-decoration: none;
+            color: black;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: lightcoral;
+        }
     </style>
 </head>
 <body>
@@ -103,5 +115,7 @@
     <%
         }
     %>
+
+    <p style="text-align:center;"><a href="managerHome.jsp" class="back-link">Back to Manager Home</a></p>
 </body>
 </html>
