@@ -39,7 +39,7 @@
 
                 if ("Manager".equalsIgnoreCase(employeeRole)) {
                     response.sendRedirect("managerHome.jsp"); 
-                } else if ("Customer Representative".equalsIgnoreCase(employeeRole)) {
+                } else if ("customer_rep".equalsIgnoreCase(employeeRole)) {
                     response.sendRedirect("customerRepHome.jsp"); 
                 } else {
                     out.println("Unknown employee role!");
