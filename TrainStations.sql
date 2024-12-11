@@ -1,4 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS TrainStations;
 use TrainStations;
 
 drop table if exists Stops;
@@ -9,51 +8,76 @@ drop table if exists Employee;
 drop table if exists Station;
 drop table if exists Train;
 
+-- -----------------------------------------------
+--	Station										--
+-- -----------------------------------------------
+
 create table Station (
-	sid int primary key not null auto_increment, 
-    name varchar(50) not null, 
-    city varchar(50) not null, 
-    state varchar(50) not null
+	sid int auto_increment primary key, 
+    name varchar(50), 
+    city varchar(50), 
+    state varchar(50)
 ) engine = InnoDB;
 
-create table Train(
+-- -----------------------------------------------
+--	Train									    --
+-- -----------------------------------------------
+
+create table Train (  				
 	tid int primary key
 )engine = InnoDB;
 
+-- -----------------------------------------------
+--	Customer									--
+-- -----------------------------------------------
+
 create table Customer (
 	username varchar(50) primary key, 
-    password varchar(50) not null, 
+    password varchar(50), 
     email varchar(50), 
     fname varchar(50), 
     name varchar(50)
 ) engine = InnoDB;
 
+-- -----------------------------------------------
+--	Employee									--
+-- -----------------------------------------------
+
 create table Employee (
 	username varchar(50) primary key, 
-    password varchar(50) not null, 
+    password varchar(50), 
     ssn varchar(11), 
     fname varchar(50), 
-    name varchar(50), 
-    role enum('manager', 'customer_rep') not null
+    lname varchar(50), 
+    role enum('manager', 'customer_rep')
 ) engine = InnoDB;
 
+-- -----------------------------------------------
+--	Train TSchedule								--
+-- -----------------------------------------------
+
 create table Tschedule (
-	schedule_id int primary key, 
-    transit_line varchar(50), 
-    origin_id int, 
+	schedule_id int auto_increment primary key, 
+    transit_line varchar(50), -- Atlantic City Line, Bergen County Line, Gladstone Branch, Main Line, Meadowlands Rail Line, Montclair-Boonton Line, Morristown Line, Northeast Corridor Line, Nort Jersey Coastal Line, Pascack Valley Line, Port Jervis Line, Princeton Line, Raritan Valley Line.
+    origin_id int,
     destination_id int, 
     base_fare double, 
-    origin_departure datetime, 
-    origin_arrival datetime,
-    destination_departure datetime, 
-    destination_arrival datetime,
+    origin_arrival datetime, 
+    origin_departure datetime,
+    destination_arrival datetime, 
+    destination_departure datetime,
     train_id int, 
     foreign key (origin_id) references Station(sid),
+    foreign key (destination_id) references Station(sid),
 	foreign key (train_id) references Train(tid)
     ) engine = InnoDB;
     
+-- -----------------------------------------------
+--	-- Stops										--
+-- -----------------------------------------------
+    
 create table Stops (
-	stop_id int primary key, 
+    stop_id int primary key, 
     station_id int, 
     schedule_id int, 
     stop_sequence_num int, 
@@ -62,20 +86,49 @@ create table Stops (
     foreign key (station_id) references Station(sid), 
     foreign key (schedule_id) references Tschedule(schedule_id)
 ) engine = InnoDB;
+-- -----------------------------------------------
+--	-- Reservation									--
+-- -----------------------------------------------
+
+-- create table Reservation (
+-- 	rid int primary key, 
+--     passenger varchar(50),
+-- 	total_fare double, 
+--     schedule_id int,
+--     origin_id int,
+--     destination_id int,
+--     date_made datetime, 
+-- 	canceled boolean, 
+--     oversees varchar(50), 
+--     trip_type enum('oneway', 'roundtrip'),
+--     foreign key (origin_id) references Station(sid),
+--     foreign key (destination_id) references Station(sid),
+-- 	foreign key (schedule_id) references Tschedule(schedule_id),
+--     foreign key (passenger) references Customer(username), 
+-- 	foreign key (oversees) references Employee(username)
+-- ) engine = InnoDB;
 
 create table Reservation (
-	rid int primary key, 
+    rid int primary key, 
     passenger varchar(50),
-	total_fare double, 
-    date_made datetime, 
+    date_made date, 
+    transit_line varchar(50),
+    train_id int, 
     schedule_id int,
-	canceled boolean, 
-    oversees varchar(50), 
-    trip_type enum('oneway', 'roundtrip'), 
-	foreign key (schedule_id) references Tschedule(schedule_id),
-    foreign key (passenger) references Customer(username), 
-	foreign key (oversees) references Employee(username)
+    origin_id int,
+    destination_id int,
+    travel_date date,
+    departure_time time,
+    arrival_time time,
+    trip_type enum('oneway', 'roundtrip'),
+    total_fare double,
+    foreign key (train_id) references Train(tid),
+    foreign key (origin_id) references Station(sid),
+    foreign key (destination_id) references Station(sid),
+    foreign key (schedule_id) references Tschedule(schedule_id),
+    foreign key (passenger) references Customer(username)
 ) engine = InnoDB;
+
 
 CREATE TABLE Questions (
     question_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -85,7 +138,6 @@ CREATE TABLE Questions (
     answered BOOLEAN DEFAULT FALSE,
     answer TEXT
 )engine = InnoDB ;
-
 
 
 -- -----------------------------------------------
@@ -122,7 +174,6 @@ insert into Station (name, city, state) Values
   ('Aquarium Station', 'Camden', 'NJ'),
   ('Asbury Park Station', 'Asbury Park', 'NJ'),
   ('Atco Station', 'Atco', 'NJ'), 
-  ('Atlantic City Station', 'Atlantic City', 'NJ'),
   ('Avenel Station', 'Avenel', 'NJ'),
   ('Bay Head Station', 'Bay Head', 'NJ'),
   ('Bay Street Station', 'Montclair', 'NJ'), 
@@ -260,7 +311,7 @@ insert into Station (name, city, state) Values
   ('Route 73 - Pennsauken Station', 'Pennsauken', 'NJ'),
   ('Rutherford Station', 'Rutherford', 'NJ'),
   ('Salisbury Mills-Cornwall Station', 'Salisbury Mills', 'NY'), 
-  ('Secaucus Junction —> Frank R. Lautenberg Station', 'Secaucus', 'NJ'), 
+  ('Secaucus Junction/Frank R. Lautenberg Station', 'Secaucus', 'NJ'), 
   ('Short Hills Station', 'Millburn', 'NJ'), 
   ('Sloatsburg Station', 'Sloatsburg', 'NY'),
   ('Somerville Station', 'Somerville', 'NJ'),
@@ -284,8 +335,7 @@ insert into Station (name, city, state) Values
   ('Wayne Route 23 - Transit Center Station', 'Wayne', 'NJ'),
   ('Westfield Station', 'Westfield', 'NJ'),
   ('Westwood Station', 'Westwood', 'NJ'),
-  ('White House Station', 'Whitehouse Station', 'NJ'), 
-  ('William H. Gray III 30th Street Station', 'Philadelphia', 'PA'),
+  ('White House Station', 'Whitehouse Station', 'NJ'),
   ('Wood-Ridge Station', 'Wood-Ridge', 'NJ'),
   ('Woodbridge Station', 'Woodbridge', 'NJ'),
   ('Woodcliff Lake Station', 'Woodcliff Lake', 'NJ'),
@@ -300,11 +350,9 @@ insert into Station (name, city, state) Values
   ('Warren Street / NJIT Station', 'Newark', 'NJ'),
   ('Washington Street Station', 'Newark', 'NJ'), 
   ('Military Park Station', 'Newark', 'NJ'), 
-  ('Newark Penn Station', 'Newark', 'NJ'),
   ('NJPAC / Center Street Station', 'Newark', 'NJ'),
   ('Atlantic Street Station', 'Newark', 'NJ'), 
   ('Riverfront Stadium Station', 'Newark', 'NJ'), 
-  ('Newark Broad Street Station', 'Newark', 'NJ'),
   ('Harriet Tubman Square Station', 'Newark', 'NJ'), 
   ('Tonnelle Ave Station', 'North Bergen', 'NJ'), 
   ('Bergenline Ave Station', 'Union City', 'NJ'), 
@@ -329,7 +377,9 @@ insert into Station (name, city, state) Values
   ('45th Street Station', 'Bayonne', 'NJ'), 
   ('34th Street Station', 'Bayonne', 'NJ'), 
   ('22nd Street Station', 'Bayonne', 'NJ'), 
-  ('8th Street Station', 'Bayonne', 'NJ');
+  ('8th Street Station', 'Bayonne', 'NJ'),
+  ('Meadowlands Sports Complex Station', 'East Rutherford', 'NJ');
+  
 		
 insert into Train (tid) VALUES
   ('1088'), ('1189'), ('1401'), ('1493'), ('1532'), ('1784'), ('1843'), ('2379'), 
@@ -399,8 +449,92 @@ insert into Employee values
 	#foreign key (train_id) references Train(tid)
     #) engine = InnoDB;
 
+Insert into Tschedule (transit_line, origin_id, destination_id, base_fare, origin_departure, origin_arrival, destination_departure, destination_arrival, train_id)  Values
+('Raritan Valley Line', '76', '126', '18.65', '2024-12-11 05:51', NULL, NULL, '2024-12-11 07:42', '3824'),
+('Raritan Valley Line', '126', '76', '18.65', '2024-12-11 06:41:00', NULL, NULL, '2024-12-11 08:31:00', '1189'),
+('Raritan Valley Line', '76', '126', '18.65', '2024-12-12 05:51', NULL, NULL, '2024-12-12 07:42', '3824'),
+('Raritan Valley Line', '126', '76', '18.65', '2024-12-12 06:41:00', NULL, NULL, '2024-12-12 08:31:00', '1189'),
+('Morristown Line', '69', '123', '18.40', '2024-12-11 06:45:00', NULL, NULL, '2024-12-11 08:59:00', '1493'),
+('Morristown Line', '69', '79', '13.80', '2024-12-11 06:45:00', NULL, NULL, '2024-12-11 08:34:00', '1401'),
+('Morristown Line', '69', '123', '18.40', '2024-12-12 06:45:00', NULL, NULL, '2024-12-12 08:59:00', '1493'),
+('Morristown Line', '69', '79', '13.80', '2024-12-12 06:45:00', NULL, NULL, '2024-12-12 08:34:00', '1401'),
+('Morristown Line', '123', '69', '18.40', '2024-12-11 01:51:00', NULL, NULL, '2024-12-11 04:23:00', '1784'),
+('Morristown Line', '79', '69', '13.80', '2024-12-11 02:27:00', NULL, NULL, '2024-12-11 04:23:00', '2978'),
+('Morristown Line', '123', '69', '18.40', '2024-12-12 01:51:00', NULL, NULL, '2024-12-12 04:23:00', '1784'),
+('Morristown Line', '79', '69', '13.80', '2024-12-12 02:27:00', NULL, NULL, '2024-12-12 04:23:00', '2978'),
+('Montclair-Boonton Line', '69', '123', '18.40', '2024-12-11 06:45:00', NULL, NULL, '2024-12-11 08:59:00', '1532'),
+('Montclair-Boonton Line', '69', '79', '13.80', '2024-12-11 5:04:00', NULL, NULL, '2024-12-11 07:00:00', '2379'),
+('Montclair-Boonton Line', '123', '69', '18.40', '2024-12-11 09:09:00', NULL, NULL, '2024-12-11 11:28:00', '2390'),
+('Montclair-Boonton Line', '79', '69', ' 13.80', '2024-12-11 02:27:00', NULL, NULL, '2024-12-11 04:32:00', '3105'),
+('Montclair-Boonton Line', '69', '123', '18.40', '2024-12-12 06:45:00', NULL, NULL, '2024-12-12 08:59:00', '1532'),
+('Montclair-Boonton Line', '69', '79', '13.80', '2024-12-12 5:04:00', NULL, NULL, '2024-12-12 07:00:00', '2379'),
+('Montclair-Boonton Line', '123', '69', '18.40', '2024-12-12 09:09:00', NULL, NULL, '2024-12-12 11:28:00', '2390'),
+('Montclair-Boonton Line', '79', '69', ' 13.80', '2024-12-12 02:27:00', NULL, NULL, '2024-12-12 04:32:00', '3105'),
+('Main Line', '140', '79', '20.25', '2024-12-11 03:44:00', NULL, NULL, '2024-12-11 06:11:00', '1088'),
+('Main Line', '79', '140', '20.25', '2024-12-11 04:07:00', NULL, NULL, '2024-12-11 06:18:00', '6026'),
+('Main Line', '140', '79', '20.25', '2024-12-12 03:44:00', NULL, NULL, '2024-12-12 06:11:00', '1088'),
+('Main Line', '79', '140', '20.25', '2024-12-12 04:07:00', NULL, NULL, '2024-12-12 06:18:00', '6026'),
+('Bergen Line', '140', '79', '20.25', '2024-12-11 06:03:00', NULL, NULL, '2024-12-11 08:26:00', '3343'),
+('Bergen Line', '79', '140', '20.25', '2024-12-11 09:47:00', NULL, NULL, '2024-12-11 12:21:00', '3316'),
+('Bergen Line', '140', '79', '20.25', '2024-12-12 06:03:00', NULL, NULL, '2024-12-12 08:26:00', '3343'),
+('Bergen Line', '79', '140', '20.25', '2024-12-12 09:47:00', NULL, NULL, '2024-12-12 12:21:00', '3316'),
+('Pascack Valley Line', '164', '79', '9.75', '2024-12-11 10:55:00', NULL, NULL, '2024-12-11 12:05:00', '3397'),
+('Pascack Valley Line', '79', '164', '9.75', '2024-12-11 07:28:00', NULL, NULL, '2024-12-11 08:39:00', '3515'),
+('Pascack Valley Line', '164', '79', '9.75', '2024-12-12 10:55:00', NULL, NULL, '2024-12-12 12:05:00', '3397'),
+('Pascack Valley Line', '79', '164', '9.75', '2024-12-12 07:28:00', NULL, NULL, '2024-12-12 08:39:00', '3515'), 
+('Gladstone Branch', '65', '123', '18.40','2024-12-11 02:54:00', NULL, NULL, '2024-12-11 04:52:00', '3875' ),
+('Gladstone Branch', '65', '79', '13.80', '2024-12-11 06:50:00', NULL, NULL, '2024-12-11 08:13:00', '3820'),
+('Gladstone Branch', '123', '65', '18.40', '2024-12-11 09:22:00', NULL, NULL, '2024-12-11 11:13:00', '3915'),
+('Gladstone Branch', '79', '65', '13.80', '2024-12-11 01:38:00', NULL, NULL, '2024-12-11 03:13:00', '3824'),
+('Gladstone Branch', '65', '123', '18.40','2024-12-12 02:54:00', NULL, NULL, '2024-12-12 04:52:00', '3875' ),
+('Gladstone Branch', '65', '79', '13.80', '2024-12-12 06:50:00', NULL, NULL, '2024-12-12 08:13:00', '3820'),
+('Gladstone Branch', '123', '65', '18.40', '2024-12-12 09:22:00', NULL, NULL, '2024-12-12 11:13:00', '3915'),
+('Gladstone Branch', '79', '65', '13.80', '2024-12-12 01:38:00', NULL, NULL, '2024-12-12 03:13:00', '3824'),
+('Northeast Corridor', '169', '123', '19.25', '2024-12-11 07:11:00', NULL, NULL, '2024-12-11 08:23:00', '3984'),
+('Northeast Corridor', '123', '169', '19.25', '2024-12-11 2:01:00', NULL, NULL, '2024-12-11 01:35:00', '4468'),
+('Northeast Corridor', '169', '123', '19.25', '2024-12-12 07:11:00', NULL, NULL, '2024-12-12 08:23:00', '3984'),
+('Northeast Corridor', '123', '169', '19.25', '2024-12-12 2:01:00', NULL, NULL, '2024-12-12 01:35:00', '4468'),
+('North Jersey Coast Line', '21', '126', '19.25', '2024-12-11 10:09:00', NULL, NULL, '2024-12-11 12:34:00', '4624'),
+('North Jersey Coast Line', '126', '21', '19.25', '2024-12-11 05:01:00', NULL, NULL, '2024-12-11 07:07:00', '5055'),
+('North Jersey Coast Line', '21', '126', '19.25', '2024-12-12 10:09:00', NULL, NULL, '2024-12-12 12:34:00', '4624'),
+('North Jersey Coast Line', '126', '21', '19.25', '2024-12-12 05:01:00', NULL, NULL, '2024-12-12 07:07:00', '5055'),
+('Atlantic City Line', '1', '9', '12.35', '2024-12-11 05:38:00', NULL, NULL, '2024-12-11 07:15:00', '2390'),
+('Atlantic City Line', '9', '1', '12.35', '2024-12-11 01:55:00', NULL, NULL, '2024-12-11 03:34:00', '8981'),
+('Atlantic City Line', '1', '9', '12.35', '2024-12-12 05:38:00', NULL, NULL, '2024-12-12 07:15:00', '2390'),
+('Atlantic City Line', '9', '1', '12.35', '2024-12-12 01:55:00', NULL, NULL, '2024-12-12 03:34:00', '8981');
 
-#insert into Reservation Values
+--  Stops     --          
+-- -----------------------------------------------
 
 
-#insert into Stops Values
+
+-- -----------------------------------------------
+--    Reservation                                   --
+-- -----------------------------------------------
+
+#Reservation should include most information from Tschedule except all the stops information --> Just needs to know what time the origin departs and destination_arrival
+
+#rid, passenger, trip type, fare, schedule_id, transit line,  ti origin id, destination id, departure time, arrival time, 
+
+-- > rid, passenger, date_made, transit_line, train_id, schedule_id, origin_id, dest_id, travel_date, departure time, arrival time, trip type, fare
+
+
+
+insert into Reservation Values
+('0001', 'user1', '2024-12-10', 'Atlantic City Line', '2390', '49', '1', '6', '2024-12-11', '05:38:00' , '06:30:00', 'oneway', 6.00);
+
+#rid, passenger, date_made, transit_line, train_id, schedule_id, origin_id, dest_id, travel_date, departure time, arrival time, trip type, fare
+
+
+
+insert into Stops Values
+('1', '1', '49', '1', '2024-12-11 05:38:00', NULL),
+('2', '2', '49', '2', '2024-12-11 05:49:00', '2024-12-11 05:49:00'),
+('3', '3', '49', '3', '2024-12-11 05:59:00', '2024-12-11 05:59:00'),
+('4', '4', '49', '4', '2024-12-11 06:10:00', '2024-12-11 06:10:00'),
+('5', '5', '49', '5', '2024-12-11 06:23:00', '2024-12-11 06:23:00'),
+('6', '6', '49', '6', '2024-12-11 06:30:00', '2024-12-11 06:30:00'),
+('7', '7', '49', '7', '2024-12-11 06:44:00', '2024-12-11 06:44:00'),
+('8', '8', '49', '8', '2024-12-11 06:51:00', '2024-12-11 06:51:00'),
+('9', '9', '49', '9', NULL, '2024-12-11 07:15:00' );
+
