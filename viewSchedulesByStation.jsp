@@ -27,8 +27,7 @@
         if (selectedStation != null && !selectedStation.trim().isEmpty()) {
             stmt = conn.prepareStatement(
                 "SELECT Tschedule.schedule_id, Tschedule.transit_line, " +
-                "Tschedule.origin_departure, Tschedule.origin_arrival, " +
-                "Tschedule.destination_departure, Tschedule.destination_arrival " +
+                "Tschedule.origin_departure, Tschedule.destination_arrival " +
                 "FROM Tschedule " +
                 "JOIN Station ON (Station.sid = Tschedule.origin_id OR Station.sid = Tschedule.destination_id) " +
                 "WHERE Station.name = ?"
@@ -41,8 +40,6 @@
                 schedule.put("schedule_id", rs.getInt("schedule_id"));
                 schedule.put("transit_line", rs.getString("transit_line"));
                 schedule.put("origin_departure", rs.getTimestamp("origin_departure"));
-                schedule.put("origin_arrival", rs.getTimestamp("origin_arrival"));
-                schedule.put("destination_departure", rs.getTimestamp("destination_departure"));
                 schedule.put("destination_arrival", rs.getTimestamp("destination_arrival"));
                 scheduleList.add(schedule);
             }
@@ -92,8 +89,6 @@
             <th>Schedule ID</th>
             <th>Transit Line</th>
             <th>Origin Departure</th>
-            <th>Origin Arrival</th>
-            <th>Destination Departure</th>
             <th>Destination Arrival</th>
         </tr>
         <% 
@@ -103,8 +98,6 @@
             <td><%= schedule.get("schedule_id") %></td>
             <td><%= schedule.get("transit_line") %></td>
             <td><%= schedule.get("origin_departure") %></td>
-            <td><%= schedule.get("origin_arrival") %></td>
-            <td><%= schedule.get("destination_departure") %></td>
             <td><%= schedule.get("destination_arrival") %></td>
         </tr>
         <% 
