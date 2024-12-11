@@ -65,7 +65,7 @@ create table Tschedule (
     base_fare double, 
     origin_departure datetime,
     destination_arrival datetime, 
-    train_id int, 
+    train_id int,
     foreign key (origin_id) references Station(sid),
     foreign key (destination_id) references Station(sid),
 	foreign key (train_id) references Train(tid)
@@ -108,7 +108,7 @@ create table Stops (
 -- ) engine = InnoDB;
 
 create table Reservation (
-    rid int primary key, 
+    rid int primary key auto_increment, 
     passenger varchar(50),
     date_made date, 
     transit_line varchar(50),
@@ -121,6 +121,7 @@ create table Reservation (
     arrival_time time,
     trip_type enum('oneway', 'roundtrip'),
     total_fare double,
+    canceled boolean DEFAULT false,
     foreign key (train_id) references Train(tid),
     foreign key (origin_id) references Station(sid),
     foreign key (destination_id) references Station(sid),
@@ -519,8 +520,20 @@ Insert into Tschedule (transit_line, origin_id, destination_id, base_fare, origi
 
 
 
-insert into Reservation Values
-('0001', 'user1', '2024-12-10', 'Atlantic City Line', '2390', '49', '1', '6', '2024-12-11', '05:38:00' , '06:30:00', 'oneway', 6.00);
+insert into Reservation (
+	passenger,
+    date_made,
+    transit_line,
+    train_id,
+    schedule_id,
+    origin_id,
+    destination_id,
+    travel_date,
+    departure_time,
+    arrival_time,
+    trip_type,
+    total_fare) Values
+('user1', '2024-12-10', 'Atlantic City Line', 2390, '49', 1, 6, '2024-12-11', '05:38:00' , '06:30:00', 'oneway', 6.00);
 
 #rid, passenger, date_made, transit_line, train_id, schedule_id, origin_id, dest_id, travel_date, departure time, arrival time, trip type, fare
 
