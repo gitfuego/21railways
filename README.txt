@@ -1,11 +1,3 @@
-Manager:
-Username: mcarpenter
-Password: group21!
+Train ticket booking application with role-based access control.
 
-Customer Rep:
-Username: ewilson
-Password: pass1010
-
-navigate to http://localhost:8080/p2group21/login.jsp
-database name is TrainStations
-sql file is in the directory
+Reservation functions for customers, customer support functions for service reps, and sales report generation for administrators.
